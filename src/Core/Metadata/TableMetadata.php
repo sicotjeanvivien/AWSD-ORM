@@ -62,7 +62,9 @@ final class TableMetadata
   {
     $this->rawTableName  = Normalize::string($name);
     $this->rawSchemaName = Normalize::string($schema);
-    $this->initialize();
+    $this->tableName  = Normalize::toSnakeCaseAscii($this->rawTableName);
+    $this->schemaName = Normalize::toSnakeCaseAscii($this->rawSchemaName);
+    $this->validate();
   }
 
   /**
@@ -117,11 +119,8 @@ final class TableMetadata
    *
    * @throws \InvalidArgumentException See constructor.
    */
-  private function initialize(): void
+  private function validate(): void
   {
-    $this->tableName  = Normalize::toSnakeCaseAscii($this->rawTableName);
-    $this->schemaName = Normalize::toSnakeCaseAscii($this->rawSchemaName);
-
     TableMetadataValidator::validateTableName($this->tableName);
     TableMetadataValidator::validateSchemaName($this->schemaName);
   }
